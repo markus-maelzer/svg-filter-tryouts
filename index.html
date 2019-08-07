@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="scss/index.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+</head>
+<body>
+<div class="container">
+  <div class="col-6">
+    <svg viewBox="0 0 1920 1080">
+      <filter id="drop-shadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="objectBoundingBox">
+        <-- Grab a blakc copy of the source image and blur it by 10 -->
+        <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="DROP"></feGaussianBlur>
+
+        <feFlood flood-color="#bbb" result="COLOR"></feFlood>
+
+        <feComposite in="COLOR" in2="DROP" operator="in" result="SHADOW"></feComposite>
+
+        <feOffset in="SHADOW" dx="20" dy="20" result="DROPSHADOW"></feOffset>
+        <feMerge>
+          <feMergeNode in="DROPSHADOW"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+      <image xlink:href="assets/test.jpg" 
+        width="90%" height="90%" x="5%" y="5%"
+        filter="url(#drop-shadow)"
+      ></image>
+    </svg>
+  </div>
+  <div class="col-6">
+    <img class="test" x="0" y="0" width="100%" height="100%" src="assets/test.jpg" />
+  </div>
+  <div class="col-6">
+    <svg width="600px" height="400px" viewBox="0 0 600 400">
+      <filter id="flooder">
+        <feFlood flood-color="#EB0066" flood-opacity=".9" result="FLOOD"></feFlood>
+        
+        <feMerge>
+          <feMergeNode in="FLOOD" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      
+      <text dx="100" dy="200" font-size="150" font-weight="bold" filter="url(#flooder)">Effect!</text>
+    </svg>
+  </div>
+</div>
+
+<div class="container">
+  <div class="col-6">
+    <svg viewBox="0 0 1920 1080">
+      <filter id="fe-morph" x="-10%" y="-10%" 
+        width="120%" height="120%" 
+        filterUnits="objectBoundingBox"
+      >
+        <feMorphology operator="erode" radius="8" />
+      </filter>        
+      <image xlink:href="assets/test.jpg" 
+      width="90%" height="90%" x="5%" y="5%"
+      filter="url(#fe-morph)"
+      ></image>
+    </svg>
+  </div>
+  <div class="col-6">
+    <svg viewBox="0 0 1000 800">
+      <filter id="outline">
+        <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="4" />
+        
+        <feFlood flood-color="#32dfec" flood-opacity="1" result="PINK"></feFlood>
+        <feComposite in="PINK" in2="DILATED" operator="in" result="OUTLINE"></feComposite>
+
+        <feMerge>
+          <feMergeNode in="OUTLINE" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>        
+      <text font-size="85px" dx="125" dy="130" 
+        font-family="sans-serif"
+        font-weight="700" filter="url(#outline)"
+      >
+        upgrade yourself
+      </text>
+    </svg>
+  </div>
+  <div class="col-6">
+    <svg class="outline" viewBox="0 0 1000 800">
+      <filter id="outline-text">
+        <!-- Start by grabbing the alpha channel of the text and dilating it-->
+        <!-- <feMorphology operator="dilate" radius="8" in="SourceGraphic" result="THICKNESS" /> -->
+        <feMorphology operator="dilate" radius="8" in="SourceAlpha" result="THICKNESS" />
+        
+         <!-- Next, grab the original text (SourceGraphic) and use it to cut out the inside of the dilated text -->
+        <feComposite operator="out" in="THICKNESS" in2="SourceGraphic"></feComposite>
+      </filter>        
+      <text font-size="140px" dx="125" dy="130" 
+        font-family="sans-serif"
+        font-weight="700" filter="url(#outline-text)"
+        fill="red"
+      >
+        AYY
+      </text>
+    </svg>
+  </div>
+</div>
+
+<div class="container">
+  <div class="col-6">
+    <svg viewBox="0 0 1920 1080">
+      <filter id="redOp">
+        <feComponentTransfer>
+          <feFuncA type="table" tableValues="0 1"></feFuncA>
+        </feComponentTransfer>
+      </filter>        
+      <image xlink:href="assets/test.jpg" 
+      width="90%" height="90%" x="5%" y="5%"
+      filter="url(#redOp)"
+      ></image>
+    </svg>
+  </div>  
+  <div class="col-6">
+    <svg viewBox="0 0 1920 1080">
+      <filter id="posterize">
+        <feComponentTransfer color-interpolation-filters="sRGB">
+          <feFuncR type="discrete" tableValues=".25 .4 .5 .75 1" />
+          <feFuncG type="discrete" tableValues=".25 .4 .5 .75 1" />
+          <feFuncB type="discrete" tableValues=".25 .4 .5 .75 1" />
+        </feComponentTransfer>
+      </filter>        
+      <image xlink:href="assets/test.jpg" 
+      width="90%" height="90%" x="5%" y="5%"
+      filter="url(#posterize)"
+      ></image>
+    </svg>
+  </div>  
+  <div class="col-6">
+    <svg viewBox="0 0 1920 1080">
+      <filter id="duotone">
+        <!-- Grab the SourceGraphic (implicit) and convert it to grayscale -->
+        <feColorMatrix type="matrix" 
+        values=".33 .33 .33 0 0
+                .33 .33 .33 0 0
+                .33 .33 .33 0 0
+                 0   0   0  1 0"
+        >
+        </feColorMatrix>
+        <!-- Map the grayscale result to the gradient map provided in tableValues -->
+        <feComponentTransfer color-interpolation-filters="sRGB">
+          <feFuncR type="table" tableValues=".996078431  .984313725"></feFuncR>
+          <feFuncG type="table" tableValues=".125490196  .941176471"></feFuncG>
+          <feFuncB type="table" tableValues=".552941176  .478431373"></feFuncB>
+        </feComponentTransfer>
+        <feComponentTransfer color-interpolation-filters="sRGB">
+          <feFuncR type="gamma" exponent="1.5" amplitude="1.3" offset="0"></feFuncR>
+          <feFuncG type="gamma" exponent="1.5" amplitude="1.3" offset="0""></feFuncG>
+          <feFuncB type="gamma" exponent="1.5" amplitude="1.3" offset="0"></feFuncB>
+        </feComponentTransfer>
+      </filter>        
+      <image xlink:href="assets/test.jpg" 
+      width="90%" height="90%" x="5%" y="5%"
+      filter="url(#duotone)"
+      ></image>
+    </svg>
+  </div> 
+  <div class="col-6">
+    <svg viewBox="0 0 1920 1080">
+      <filter id="duotone-2">
+        <!-- Grab the SourceGraphic (implicit) and convert it to grayscale -->
+        <feColorMatrix type="matrix" 
+        values=".33 .33 .33 0 0
+                .33 .33 .33 0 0
+                .33 .33 .33 0 0
+                  0   0   0  1 0"
+        >
+        </feColorMatrix>
+        <!-- Map the grayscale result to the gradient map provided in tableValues -->
+        <feComponentTransfer color-interpolation-filters="sRGB">
+          <feFuncR type="table" tableValues=".549019607 .4 .984313725 "></feFuncR>
+          <feFuncG type="table" tableValues=".0 .4 .941176471 "></feFuncG>
+          <feFuncB type="table" tableValues=".094117647 .4 .478431373 "></feFuncB>
+        </feComponentTransfer>
+        
+      </filter>        
+      <image xlink:href="assets/test.jpg"
+      width="90%" height="90%" x="5%" y="5%"
+      filter="url(#duotone-2)"
+      ></image>
+    </svg>
+  </div>   
+
+  <div class="" style="width: 100%">
+    <svg viewBox="0 0 1920 1080">
+      <filter id="conform" x="-50%" y="-50%" width="200%" height="200%">
+        <feImage xlink:href="assets/dm.jpg" x="0" y="0" width="100%" height="100%" 
+          preserveAspectRatio="none">
+        </feImage>
+        <!-- Desaturate the image. -->
+        <feColorMatrix type="saturate" values="0" result="IMAGE"/>
+        <feGaussianBlur in="IMAGE" stdDeviation="0.25" result="MAP"></feGaussianBlur>
+       
+        <feDisplacementMap 
+          in="SourceGraphic" in2="MAP" scale="15" 
+          xChannelSelector="R" yChannelSelector="R" result="Textured_Text"
+        />
+        <feImage xlink:href="assets/dm.jpg" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="BG"></feImage>
+
+        <feColorMatrix in="Textured_Text" result="Textured_Text_2" type="matrix" 
+           values="1 0 0 0 0 
+                   0 1 0 0 0 
+                   0 0 1 0 0 
+                   0 0 0 .9 0" />      
+
+        <!-- Blend the text with the background -->
+        <feBlend in="BG" in2="Textured_Text_2" mode="multiply" result="BLENDED_TEXT"></feBlend>
+
+        <feMerge>
+            <feMergeNode in="BG"></feMergeNode>
+            <feMergeNode in="BLENDED_TEXT"></feMergeNode>
+        </feMerge>
+      </filter>     
+      <text dx="150" dy="400" font-size="20rem" font-weight="bold" filter="url(#conform)" fill="#00826C"> organic </text>       
+    </svg>
+  </div>   
+</div>
+
+
+
+<div class=container>
+  <h2 class="fw">da grain O-O</h2>
+  <div class="col-6">
+      <svg viewBox="0 0 1920 1080">
+        <filter id="rain"x="0" y="0" width="100%" height="100%">  
+          <feTurbulence in="Sourcegraphic" baseFrequency="0.7 0.01" result="NOISE"  />
+          <feBlend 
+            in="NOISE" in2="SourceGraphic" mode="overlay"
+            result="BLENDED_TEXT" 
+          />
+        </filter>  
+        <filter id="grain"x="0" y="0" width="100%" height="100%">  
+          <feTurbulence in="Sourcegraphic" baseFrequency="0.7" result="NOISE"  />
+          <feBlend 
+            in="NOISE" in2="SourceGraphic" mode="overlay"
+            result="BLENDED_TEXT" 
+          />
+        </filter>  
+        <image xlink:href="assets/test.jpg"
+          width="90%" height="90%" x="5%" y="5%"
+          filter="url(#rain)"
+        ></image>  
+      </svg>
+  </div>
+  <div class="col-6 bg-gradient" style="filter: url(#grain);">
+
+  </div>
+</div>
+<script src="js/index.js"></script>
+</body>
+</html>
