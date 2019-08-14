@@ -226,6 +226,33 @@
 </div>
 
 
+<!-- PARTL - BALKEN/ -->
+<svg class="fw" viewBox="0 -60 1920 180">
+  <filter id="drop-shadow-top" x="-100%" y="-100%" width="200%" height="200%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="DROP"></feGaussianBlur>
+
+    <feFlood flood-color="#333" flood-opacity="0.5" result="COLOR"></feFlood>
+    <feComposite in="COLOR" in2="DROP" operator="in" result="SHADOW"></feComposite>
+
+    <feOffset in="SHADOW" dx="0" dy="-20" result="DROPSHADOW"></feOffset>
+    <feMerge>
+      <feMergeNode in="DROPSHADOW"></feMergeNode>
+      <feMergeNode in="SourceGraphic"></feMergeNode>
+    </feMerge>
+  </filter>
+  <path filter="url(#drop-shadow-top)" fill="#161619" d="M0,0S480,72,960,72,1920,0,1920,0V120H0Z" transform="translate(0 -0.06)"/>
+</svg>  
+<div class="bg-dark fw" style="margin-top: -4px;">
+  <img class="img-test" src="assets/grafik-people-table.svg" style="width: 40%;" />
+</div>
+
+<img src="assets/balken.svg" style="filter: url(#drop-shadow-top); margin-top: 150px;">
+<div class="bg-dark fw" style="margin-top: -5px;"> 
+</div>
+
+
+
+
 
 <div class=container>
   <h2 class="fw">da grain O-O</h2>
@@ -254,7 +281,9 @@
   <div class="col-6 bg-gradient" style="filter: url(#grain);">
 
   </div>
+
 </div>
+
 <script src="js/index.js"></script>
 </body>
 </html>

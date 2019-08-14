@@ -1,3 +1,8 @@
+
+body {
+  margin: 0;
+}
+
 drop-shadowbody {
   margin: 0;
 }
@@ -12,6 +17,7 @@ drop-shadowbody {
 
 img, svg {
   width: 100%;
+  height: auto;
 }
 
 .test {
@@ -52,4 +58,25 @@ svg.outline {
 
 .bg-gradient {
   background-image: linear-gradient(90deg, #d4b290, #f5e3be);
+}
+
+.bg-dark {
+  background-color: #161619;
+  height: 250px;
+
+  &:before {
+    content: "";
+    bottom: 0;
+    left: 0; 
+    width: 60%;
+    height: 2px;
+    position: absolute;
+    background: #fff;
+  }
+}
+
+.img-test {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
